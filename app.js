@@ -5,7 +5,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 //security middleware library import
-const rateLimit = require('express-rate-limit')
+const rateLimit = require('express-rate-limit');
 const helemt = require('helmet');
 const xssClean =require('xss-clean');
 const  mongoSanitize=require('express-mongo-sanitize');
