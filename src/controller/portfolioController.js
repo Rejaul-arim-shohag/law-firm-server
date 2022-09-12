@@ -5,6 +5,7 @@ const ObjectId = mongoose.Types.ObjectId;
 
 exports.createPortfolio = (req, res) => {
     heroPortfolioModel.create(req.body, (err, data) => {
+        console.log(req.body)
         if (err) {
             res.status(200).json({ "status": "fail", "data": err })
         } else {
@@ -50,7 +51,7 @@ exports.updatePortfolioItem = (req, res) => {
 exports.deletePortfolioItem = (req, res) => {
     heroPortfolioModel.deleteOne({_id:req.params.id},(err,data)=>{
         if (err) {
-            res.status(200).json({ "status": "fail", "data": err })
+            res.status(400).json({ "status": "fail", "data": err })
         } else {
             res.status(200).json({ "status": "success", "data": data })
         }

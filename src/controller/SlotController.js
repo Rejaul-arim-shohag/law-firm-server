@@ -14,11 +14,8 @@ exports.readSlot = (req, res) => {
     SlotModel.aggregate([
         {
             $project: {
-                _id: 0,
-                ServiceID: 1,
-                SlotID: 1,
-                startTime: 1,
-                endTime: 1,
+                _id: 1,
+                slotTime:1
             }
         }
     ], (err, data) => {

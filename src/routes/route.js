@@ -8,7 +8,6 @@ const adminVerifyMiddleware = require("../middleware/AdminVerifyMiddleware")
 //controller 
 const UserController = require("../controller/UserController");
 const AppointmentController = require("../controller/AppointmentController")
-const AppointmentServicesController = require("../controller/AppointmentServicesController");
 const SlotController = require("../controller/SlotController");
 const AttorneyController = require("../controller/AttorneyController");
 const ServiceAreaController =require("../controller/ServiceAreaController")
@@ -25,6 +24,10 @@ const footerController = require ("../controller/FooterController")
 //admin route
 router.post("/AdminRegistration",adminVerifyMiddleware, AdminController.AdminRegistration);
 router.post("/AdminLogin", AdminController.AdminLogin);
+router.get("/AdminProfileDetails",adminVerifyMiddleware, AdminController.AdminProfileDetails);
+
+router.post("/updateAdminProfile",adminVerifyMiddleware, AdminController.updateAdminProfile);
+
 
 //user route
 router.post("/createUser", UserController.userRegistration);
@@ -45,14 +48,14 @@ router.post("/createService",adminVerifyMiddleware, ServiceAreaController.create
 router.get("/readServiceAreas",ServiceAreaController.readServiceAreas);
 router.post("/updateServiceArea/:serviceID",adminVerifyMiddleware, ServiceAreaController.updateServiceArea);
 router.get("/deleteServiceArea/:serviceID",adminVerifyMiddleware, ServiceAreaController.deleteServiceArea);
-router.get("/readServiceById/:serviceID",adminVerifyMiddleware, ServiceAreaController.readServiceById);
+router.get("/readServiceById/:serviceID",ServiceAreaController.readServiceById);
 
 //plan areas
 router.post("/createOurPlan",adminVerifyMiddleware, PlanController.createOurPlan);
 router.get("/readOurPlans", PlanController.readOurPlans);
 router.post("/updateOurPlan/:PlanID",adminVerifyMiddleware, PlanController.updateOurPlan);
 router.get("/deleteOurPlan/:PlanID",adminVerifyMiddleware, PlanController.deleteOurPlan);
-router.get("/readPlanById/:PlanID",adminVerifyMiddleware, PlanController.readPlanById);
+router.get("/readPlanById/:PlanID",PlanController.readPlanById);
 
 
 //Contact
@@ -97,30 +100,17 @@ router.get("/singleLegalService/:id",adminVerifyMiddleware,footerController.sing
 router.post("/updateLegalService/:id",adminVerifyMiddleware,footerController.updateLegalService);
 router.get("/deleteLegalService/:id",adminVerifyMiddleware,footerController.deleteLegalService);
 
-
-
-
-
-
-
-
-//appointment services create, and it will be create by admin
-// router.post("/AddAppointmentService",authVerifyMiddleware, AppointmentServicesController.AddAppointmentService);
-// router.get("/ReadAppointmentServices",authVerifyMiddleware, AppointmentServicesController.readAppointmentService);
-// router.post("/UpdateAppointmentService/:ServiceID",authVerifyMiddleware, AppointmentServicesController.updateAppointmentService);
-// router.get("/DeleteAppointmentService/:ServiceID",authVerifyMiddleware, AppointmentServicesController.DeleteAppointmentService);
-
 //slot will update 
-router.post("/CreateSlot",authVerifyMiddleware, SlotController.createSlot);
-router.get("/ReadSlot",authVerifyMiddleware, SlotController.readSlot);
-//router.post("/createAppointment",authVerifyMiddleware, AppointmentController.createAppointment);
+router.post("/CreateSlot",adminVerifyMiddleware, SlotController.createSlot);
+router.get("/ReadSlot", SlotController.readSlot);
+//appointment 
+router.post("/createAppointment", AppointmentController.createAppointment);
+router.get("/readAppointmentList/:status", AppointmentController.readAppointmentList);
+router.post("/updateAppointment/:id",adminVerifyMiddleware, AppointmentController.updateAppointment);
+router.get("/deleteAppointment/:id",adminVerifyMiddleware, AppointmentController.deleteAppointment);
 
+// router.get("/ProductList/:pageNo/:perPage/:searchKeyword?",ProductsController.ProductList);
 
-
-
-
-
-
-
+router.post("/readAppointment/:pageNo/:parPage/:status?", AppointmentController.readAppointment);
 
 module.exports=router;

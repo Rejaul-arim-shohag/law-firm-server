@@ -34,3 +34,40 @@ exports.AdminLogin=(req, res)=>{
         }
     })
 }
+
+exports.AdminProfileDetails=(req,res)=>{
+    let email= req.headers.email;
+    adminModel.aggregate([
+        {$match:{email:email}},
+        {$project:{_id:1,email:1,photo:1,}}
+    ],(err,data)=>{
+        if(err){
+            res.status(400).json({status:"fail",data:err})
+        }
+        else {
+            res.status(200).json({status:"success",data:data})
+        }
+    })
+}
+
+exports.updateAdminProfile=(req,res)=>{
+    let email= req.headers.email;
+    const password = req.headers.password;
+    adminModel.aggregate([
+        {$match:{email:email, password:password}},
+    ],(err,data)=>{
+        if(err){
+            res.status(400).json({status:"fail",data:"incorrect password"})
+        }
+        else {
+            adminModel.updateOne({email:email}, req.body, (err,data)=>{
+                if(err){
+                    res.status(200).json({status:"fail",data:err})
+                } else {
+                    res.status(200).json({status:"success",data:data})
+
+                }
+            })
+        }
+    })
+}
