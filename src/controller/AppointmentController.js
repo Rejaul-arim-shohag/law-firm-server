@@ -36,7 +36,7 @@ exports.readAppointment = async (req, res) => {
             }])
         }
         else if (status !== "0" && searchingDate === "0"){
-            console.log("status exit but date doesent exit")
+           
             let searchQuery = { status: status }
             data = await AppointmentModel.aggregate([{
                 $facet: {
