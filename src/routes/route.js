@@ -20,20 +20,52 @@ const portfolioController = require ("../controller/portfolioController")
 const blogController = require ("../controller/blogController")
 const blogCommentController = require ("../controller/blogCommentController")
 const footerController = require ("../controller/FooterController")
-
+const settingsController = require ("../controller/settingsController")
+const termsAndPrivacyController=require("../controller/termsAndPrivecyController")
 //admin route
 router.post("/AdminRegistration",adminVerifyMiddleware, AdminController.AdminRegistration);
 router.post("/AdminLogin", AdminController.AdminLogin);
 router.get("/AdminProfileDetails",adminVerifyMiddleware, AdminController.AdminProfileDetails);
-
 router.post("/updateAdminProfile",adminVerifyMiddleware, AdminController.updateAdminProfile);
+
+
+//setting controllers, slot
+//logo
+router.post("/insertLogo",adminVerifyMiddleware, settingsController.insertLogo);
+router.get("/readLogo", settingsController.findLogo);
+router.get("/DeleteLogo/:id",adminVerifyMiddleware, settingsController.deleteLogo);
+//heroImage 
+router.post("/insertHeroImage",adminVerifyMiddleware, settingsController.insertHeroImage);
+router.get("/findHeroImage", settingsController.findHeroImage);
+router.get("/deleteHeroImage/:id",adminVerifyMiddleware, settingsController.deleteHeroImage);
+// address
+router.post("/insertAddress",adminVerifyMiddleware, settingsController.insertAddress);
+router.get("/deleteAddress/:id",adminVerifyMiddleware, settingsController.deleteAddress);
+router.post("/updateAddress/:id",adminVerifyMiddleware, settingsController.updateAddress);
+router.get("/FindAddress", settingsController.FindAddress);
+
+//hero content
+router.post("/insertHeroContent",adminVerifyMiddleware, settingsController.insertHeroContent);
+router.get("/deleteHeroContent/:id",adminVerifyMiddleware, settingsController.deleteHeroContent);
+router.get("/findHeroContent", settingsController.findHeroContent);
+
+//terms and condition
+router.post("/createTerms",adminVerifyMiddleware, termsAndPrivacyController.createTerms);
+router.get("/deleteTerms/:id",adminVerifyMiddleware, termsAndPrivacyController.deleteTerms);
+router.get("/readTerms", termsAndPrivacyController.readTerms);
+router.post("/updateTerms/:id",adminVerifyMiddleware, termsAndPrivacyController.updateTerms);
+
+//privacy
+router.post("/createPrivacy",adminVerifyMiddleware, termsAndPrivacyController.createPrivacy);
+router.get("/deletePrivacy/:id",adminVerifyMiddleware, termsAndPrivacyController.deletePrivacy);
+router.get("/readPrivacy", termsAndPrivacyController.readPrivacy);
+router.post("/updatePrivacy/:id",adminVerifyMiddleware, termsAndPrivacyController.updatePrivacy);
 
 
 //user route
 router.post("/createUser", UserController.userRegistration);
 router.post("/loginUser", UserController.login);
 router.post("/profileUpdate",authVerifyMiddleware, UserController.profileUpdate);
-
 
 
 //attoreny
@@ -103,6 +135,8 @@ router.get("/deleteLegalService/:id",adminVerifyMiddleware,footerController.dele
 //slot will update 
 router.post("/CreateSlot",adminVerifyMiddleware, SlotController.createSlot);
 router.get("/ReadSlot", SlotController.readSlot);
+router.get("/deleteSlot/:id",adminVerifyMiddleware, SlotController.deleteSlot);
+
 //appointment 
 router.post("/createAppointment", AppointmentController.createAppointment);
 router.get("/readAppointmentList/:status", AppointmentController.readAppointmentList);

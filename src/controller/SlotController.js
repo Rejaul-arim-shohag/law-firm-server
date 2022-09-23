@@ -9,6 +9,15 @@ exports.createSlot = (req, res) => {
         }
     })
 }
+exports.deleteSlot = (req, res) => {
+    SlotModel.deleteOne({_id: req.params.id}, (err, data) => {
+        if (err) {
+            res.status(500).json({ "status": "fail", "data": err })
+        } else {
+            res.status(200).json({ "status": "success", "data": data })
+        }
+    })
+}
 
 exports.readSlot = (req, res) => {
     SlotModel.aggregate([
