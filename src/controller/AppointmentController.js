@@ -14,11 +14,13 @@ exports.readAppointment = async (req, res) => {
         let pageNo = Number(req.params.pageNo);
         let perPage = Number(req.params.parPage);
         let status = req.params.status
-        let searchingDate = req.body["SearchDate"];
+        let searchStartDate = req.body["SearchStartDate"];
+        let searchEndDate = req.body["SearchEndDate"];
         let skipRow = (pageNo - 1) * perPage;
         let data;
-        if (searchingDate !== "0" && status !== "0") {
-            let searchQuery = { apointmentDate: searchingDate, status:status}
+        //inside if block I want to find new appointment without date
+        if (status !== "0" && searchStartDate === "0" && searchEndDate === "0") {
+            let searchQuery = { status: status}
             data = await AppointmentModel.aggregate([{
                 $facet: {
                     total: [{ $match: searchQuery }, { $count: "count" }],
@@ -26,41 +28,64 @@ exports.readAppointment = async (req, res) => {
                 }
             }])
         }
-        else if (status === "0" && searchingDate === "0") {
-
+        else if (status === "0" && searchStartDate === "0" && searchEndDate === "0") {
             data = await AppointmentModel.aggregate([{
                 $facet: {
                     total: [{ $count: "count" }],
                     Rows: [{ $skip: skipRow }, { $limit: perPage }]
                 }
             }])
-        }
-        else if (status !== "0" && searchingDate === "0"){
-           
-            let searchQuery = { status: status }
+        } else if (status !== "0" && searchStartDate !== "0" && searchEndDate !== "0") {
+            const endDate = new Date(searchStartDate);
+            const startDate = new Date(searchEndDate);
+            console.log(startDate,endDate)
+            let searchQuery = {
+                status: status,
+                apointmentDate: {
+                    $gte: startDate,
+                    $lte: endDate,
+                }
+            }
             data = await AppointmentModel.aggregate([{
                 $facet: {
                     total: [{ $match: searchQuery }, { $count: "count" }],
-                    Rows: [{ $match: searchQuery }, { $skip: skipRow }, { $limit: perPage }],
+                    Rows: [{ $match: searchQuery }, { $skip: skipRow }, { $limit: perPage }]
                 }
             }])
         }
-         else if(status === "0" && searchingDate !== "0"){ 
-            let searchQuery = { apointmentDate: searchingDate }
+        else if (status === "0" && searchStartDate !== "0" && searchEndDate !== "0") {
+            const endDate = new Date(searchStartDate);
+            const startDate = new Date(searchEndDate);
+            console.log(startDate,endDate)
+            let searchQuery = {
+                apointmentDate: {
+                    $gte: startDate,
+                    $lte: endDate,
+                }
+            }
             data = await AppointmentModel.aggregate([{
                 $facet: {
                     total: [{ $match: searchQuery }, { $count: "count" }],
-                    Rows: [{ $match: searchQuery }, { $skip: skipRow }, { $limit: perPage }],
+                    Rows: [{ $match: searchQuery }, { $skip: skipRow }, { $limit: perPage }]
                 }
             }])
+        }
+
+        else {
+            res.status(200).json({ status: "success", data: "else block" })
         }
         res.status(200).json({ status: "success", data })
     }
-    catch (e) {
-        console.log(e)
-        res.status(400).json({ status: "fail", error: e })
+    catch (error) {
+        console.log(error)
+        res.status(400).json({ status: "fail", error: error })
+
     }
 }
+
+
+
+
 
 exports.readAppointmentList = (req, res) => {
     const status = req.params.status;

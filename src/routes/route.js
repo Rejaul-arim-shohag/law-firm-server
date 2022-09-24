@@ -29,6 +29,10 @@ router.get("/AdminProfileDetails",adminVerifyMiddleware, AdminController.AdminPr
 router.post("/updateAdminProfile",adminVerifyMiddleware, AdminController.updateAdminProfile);
 
 
+router.get("/RecoverVerifyEmail/:email", AdminController.RecoverVerifyEmail);
+router.get("/RecoverVerifyOTP/:email/:otp", AdminController.RecoverVerifyOTP);
+router.post("/RecoverResetPass", AdminController.RecoverResetPass);
+
 //setting controllers, slot
 //logo
 router.post("/insertLogo",adminVerifyMiddleware, settingsController.insertLogo);
@@ -144,7 +148,9 @@ router.post("/updateAppointment/:id",adminVerifyMiddleware, AppointmentControlle
 router.get("/deleteAppointment/:id",adminVerifyMiddleware, AppointmentController.deleteAppointment);
 
 // router.get("/ProductList/:pageNo/:perPage/:searchKeyword?",ProductsController.ProductList);
+router.post("/readAppointment/:pageNo/:parPage/:status", AppointmentController.readAppointment);
 
-router.post("/readAppointment/:pageNo/:parPage/:status?", AppointmentController.readAppointment);
+
+
 
 module.exports=router;

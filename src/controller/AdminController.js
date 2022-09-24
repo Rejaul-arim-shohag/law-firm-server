@@ -89,7 +89,7 @@ exports.updateAdminProfile = async (req, res) => {
 }
 
 
-//forget password option addd
+//forget password option add
 exports.RecoverVerifyEmail=async (req,res)=>{
     let email = req.params.email;
     let OTPCode = Math.floor(100000 + Math.random() * 900000)
@@ -108,7 +108,7 @@ exports.RecoverVerifyEmail=async (req,res)=>{
         }
 
     }catch (e) {
-        res.status(200).json({status: "fail", data:e})
+        res.status(500).json({status: "fail", data:e})
     }
 
 }
@@ -145,8 +145,9 @@ exports.RecoverResetPass=async (req,res)=>{
 
     try {
         let OTPUsedCount = await OTPModel.aggregate([{$match: {email: email, otp: OTPCode, status: statusUpdate}}, {$count: "total"}])
+        console.log(OTPUsedCount)
         if (OTPUsedCount.length>0) {
-            let PassUpdate = await UsersModel.updateOne({email: email}, {
+            let PassUpdate = await adminModel.updateOne({email: email}, {
                 password: NewPass
             })
             res.status(200).json({status: "success", data: PassUpdate})

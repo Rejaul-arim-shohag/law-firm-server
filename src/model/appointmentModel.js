@@ -5,7 +5,7 @@ const appointmentSchema = mongoose.Schema({
     phone: { type: String},
     serviceName: { type: String},
     slot: { type: String},
-    apointmentDate: { type: String},
+    apointmentDate: { type: Date},
     status: { type: String, default: 'NEW'},
     createDate: { type: Date, default: Date.now()},
 }, { versionKey: false });
